@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '**/*.js'
   workflow_dispatch:
 
 concurrency:
@@ -69,6 +67,13 @@ jobs:
           curl "${{ env.PING_URL }}"
         env:
           PING_URL: ${{ secrets.PING_URL }}
+
+      - name: Send Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: "[GitHub Actions] adblocker-cfgw-dns rules updated."
 
   keepalive:
     runs-on: ubuntu-latest
